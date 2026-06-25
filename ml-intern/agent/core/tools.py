@@ -75,7 +75,7 @@ def convert_mcp_content_to_string(content: list) -> str:
     - EmbeddedResource: has .resource field with .text or .blob
 
     Args:
-        content: List of MCP content blocks or dictionary representation of blocks
+        content: List of MCP content blocks
 
     Returns:
         String representation of the content suitable for LLM consumption
@@ -85,47 +85,15 @@ def convert_mcp_content_to_string(content: list) -> str:
 
     parts = []
     for item in content:
-        if isinstance(item, dict):
-            item_type = item.get("type")
-            if item_type == "text" or "text" in item:
-                parts.append(item.get("text") or "")
-            elif item_type == "image" or ("data" in item and "mimeType" in item):
-                parts.append(f"[Image: {item.get('mimeType', 'unknown')}]")
-            elif item_type == "resource" or "resource" in item:
-                resource = item.get("resource")
-                if isinstance(resource, dict):
-                    if resource.get("text"):
-                        parts.append(resource["text"])
-                    elif resource.get("blob"):
-                        parts.append(
-                            f"[Binary data: {resource.get('mimeType', 'unknown')}]"
-                        )
-                    else:
-                        parts.append(
-                            f"[Resource: {resource.get('uri', 'unknown')}]"
-                        )
-                elif resource is not None:
-                    if hasattr(resource, "text") and resource.text:
-                        parts.append(resource.text)
-                    elif hasattr(resource, "blob") and resource.blob:
-                        parts.append(
-                            f"[Binary data: {resource.mimeType if hasattr(resource, 'mimeType') else 'unknown'}]"
-                        )
-                    else:
-                        parts.append(
-                            f"[Resource: {resource.uri if hasattr(resource, 'uri') else 'unknown'}]"
-                        )
-                else:
-                    parts.append(f"[Resource: {item.get('uri', 'unknown')}]")
-            else:
-                parts.append(str(item))
-        elif isinstance(item, TextContent):
+        if isinstance(item, TextContent):
             # Extract text from TextContent blocks
             parts.append(item.text)
         elif isinstance(item, ImageContent):
+            # TODO: Handle images
             # For images, include a description with MIME type
             parts.append(f"[Image: {item.mimeType}]")
         elif isinstance(item, EmbeddedResource):
+            # TODO: Handle embedded resources
             # For embedded resources, try to extract text
             resource = item.resource
             if hasattr(resource, "text") and resource.text:

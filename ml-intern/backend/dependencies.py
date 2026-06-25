@@ -221,7 +221,7 @@ async def get_current_user(request: Request) -> dict[str, Any]:
     )
 
 
-def extract_token(request: Request) -> str | None:
+def _extract_token(request: Request) -> str | None:
     """Pull the HF access token from the Authorization header or cookie.
 
     Mirrors the lookup order used by ``get_current_user``.
@@ -241,7 +241,7 @@ async def require_huggingface_org_member(request: Request) -> bool:
     """
     if not AUTH_ENABLED:
         return True
-    token = extract_token(request)
+    token = _extract_token(request)
     if not token:
         return False
     return await check_org_membership(token, HF_EMPLOYEE_ORG)

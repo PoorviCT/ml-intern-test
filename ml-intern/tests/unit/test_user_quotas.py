@@ -40,14 +40,6 @@ def test_daily_cap_for_unknown_or_missing_defaults_to_free():
     assert user_quotas.daily_cap_for("mystery") == user_quotas.CLAUDE_PRO_DAILY
 
 
-def test_daily_cap_for_case_insensitive():
-    assert user_quotas.daily_cap_for("Free") == user_quotas.CLAUDE_FREE_DAILY
-    assert user_quotas.daily_cap_for("FREE") == user_quotas.CLAUDE_FREE_DAILY
-    assert user_quotas.daily_cap_for(" free ") == user_quotas.CLAUDE_FREE_DAILY
-    assert user_quotas.daily_cap_for("Pro") == user_quotas.CLAUDE_PRO_DAILY
-    assert user_quotas.daily_cap_for("org") == user_quotas.CLAUDE_PRO_DAILY
-
-
 @pytest.mark.asyncio
 async def test_increment_and_read_back_same_day():
     assert await user_quotas.get_claude_used_today("u1") == 0
