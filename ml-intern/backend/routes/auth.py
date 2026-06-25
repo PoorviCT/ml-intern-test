@@ -181,7 +181,7 @@ async def org_membership(
     """Check if the authenticated user belongs to the ml-agent-explorers org."""
     if not AUTH_ENABLED:
         return {"is_member": True}
-    token = request.cookies.get("hf_access_token") or ""
+    token = request.headers.get("Authorization", "")[7:] if request.headers.get("Authorization", "").startswith("Bearer ") else (request.cookies.get("hf_access_token") or "")
     if not token:
         return {"is_member": False}
     is_member = await check_org_membership(token, ORG_NAME)
