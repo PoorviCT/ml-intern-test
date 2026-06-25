@@ -32,8 +32,7 @@ def _today() -> str:
 
 def daily_cap_for(plan: str | None) -> int:
     """Return the daily Claude-session cap for the given plan."""
-    normalized_plan = (plan or "free").strip().lower()
-    return CLAUDE_FREE_DAILY if normalized_plan == "free" else CLAUDE_PRO_DAILY
+    return CLAUDE_FREE_DAILY if (plan or "free") == "free" else CLAUDE_PRO_DAILY
 
 
 async def get_claude_used_today(user_id: str) -> int:
