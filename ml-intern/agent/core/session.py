@@ -252,7 +252,7 @@ class Session:
             # the same file instead of creating a new timestamped file every
             # minute. The timestamp in the filename is kept for first-save
             # ordering; subsequent saves just rewrite that file.
-            if self._local_save_path and Path(self._local_save_path).parent == log_dir:
+            if self._local_save_path and Path(self._local_save_path).resolve().parent == log_dir.resolve():
                 filepath = Path(self._local_save_path)
             else:
                 filename = (
