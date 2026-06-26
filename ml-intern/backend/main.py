@@ -9,8 +9,11 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from routes.agent import router as agent_router
 from routes.auth import router as auth_router
+from routes.chat import router as chat_router
+from routes.health import router as health_router
+from routes.sessions import router as sessions_router
+from routes.system import router as system_router
 
 # Load .env from project root (parent directory)
 load_dotenv(Path(__file__).parent.parent / ".env")
@@ -82,7 +85,10 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(agent_router)
+app.include_router(health_router)
+app.include_router(system_router)
+app.include_router(sessions_router)
+app.include_router(chat_router)
 app.include_router(auth_router)
 
 # Serve static files (frontend build) in production
